@@ -1,0 +1,134 @@
+---
+title: "HW 8"
+author: "Stat 36-401"
+date: "Due 11/14/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This homework is meant to introduce you to version control in R. It is an introduction, nothing more. You'll also get a little practice with forwards & backwards model selection. 
+
+
+# 1. Getting git set up
+### Make a new project
+
+  * New project is available under the R-studio `File` tab. 
+  * Create a new directory: `LastName-HW8` 
+  * Make sure you select the option in the dialog window to create a git repository. 
+  
+### The `.gitignore` file. 
+
+Git is one type of version control, it's the one that happens to be integrated with R-studio. (Convenient, because `github.com` is useful.) It's going to track changes that you make to files in the repository directory. 
+
+But, while you want to track changes to your code, you don't want to track every little bitty change to image files and whatnot. So you need to tell git to ignore certain files. 
+
+Open `.gitignore` (might not be visible in a directory window because the filename starts with `.`) from the files tab in R studio. 
+
+Add `.html`, `.pdf` and so on, to tell git to ignore those files. 
+
+### Create your `.rmd` file and put it in that directory. 
+
+### Find the `Git` tab in R studio. 
+It should be with the Environment and History windows. 
+
+Click on the checkbox next to your `.rmd` file to "stage" your changes. In this case, the change is adding the file to be tracked by git.  
+
+### Commit your change
+The commit button should be near the top of this tab. And will open a new window. 
+
+The new window will highlight all changes (additions in green and deletions in red) so you can review them. 
+
+When you're done reviewing, add a commit message describing what changes you've made "Initial commit" is the standard first commit message. 
+
+Then hit the `Commit` button. 
+
+### Actually use it. 
+As you work through the stepwise regression problem below, make additional commits. 
+Any time you realize, "oh I should go back and fix..." it's a good idea to make a commit before you start making those changes that you'll need to propogate throughout. That way you can go back and undo it if you screw something up. 
+
+### What to turn in:
+
+  * When you're done zip up the git repo that you've been working in and submit it. 
+  * When we open the git history, I want to see at least 3 separate commits with meaningful messages. 
+  * The `.html` file should be in the directory, but git should not be tracking it. 
+  
+*****************************
+# 2. Stepwise model selection
+(You have all the code here, so this should be straightforward.)
+
+Information on these variables is available in the package documentation. We want to predict # of applications received using other variables in the dataset. 
+```{r}
+library(ISLR)
+data('College', package = 'ISLR')
+str(College)
+```
+
+
+### a. Set up the scope of the search:
+```{r}
+full_mod_string = paste('Apps~',  paste(names(College)[-2], collapse = ' + '), collapse = '')
+
+mods = list(lower = as.formula('Apps~1'),
+            upper = as.formula( full_mod_string)
+)
+
+mod.null = lm(mods$lower, data=College)
+mod.full = lm(mods$upper, data=College)
+```
+
+Write out the models being fit here. 
+
+
+### b. Forward
+```{r}
+mod.forward = step(mod.null, scope=mods, direction='forward')
+summary(mod.forward)
+```
+Describe in words what is happening at each step of the search path. 
+
+**At each step of the search path, the search path is adding one more variable to the model based on the AIC. So, first, the path calculates the AIC of each variable not included in the model and orders them in ascending order. The next step will add the lowest AIC variable to the model, and then recalculate AICs with the new model.**
+
+### c. Backward
+```{r}
+mod.backward = step(mod.full, scope=mods, direction='backward')
+summary(mod.backward)
+```
+Describe in words what is happening at each step of the search path. 
+
+
+### d. Full Stepwise. 
+```{r}
+mod.1 = lm(Apps ~ Private + Room.Board + Outstate, data = College)
+mod.both = step(mod.1, scope=mods, direction='both')
+summary(mod.both)
+```
+Describe in words what is happening at each step of the search path. 
+
+
+
+### e. Best Subsets
+```{r}
+library(leaps)
+mod.best = regsubsets(mods$upper, data = College, nbest=1, nvmax = 15) 
+plot(mod.best)
+summary(mod.best)
+plot(summary(mod.best)$bic)
+summary(mod.best)$which[summary(mod.best)$bic == min(summary(mod.best)$bic), ]
+```
+Describe the results. Use the documentation to help you. 
+
+
+### f. Comparison
+Compare the results from each of the searchs. In particular, do the results match? Why or why not? Will this happen for every data set? Why or why not? What did you learn from this exercise? 
+
+
+### g. `force.in`
+Why is there a `force.in` option in regsubsets? When might you want to use this? How could you use `scope` in the `step` function to accomplish the same thing. 
+
+
+
+
+
