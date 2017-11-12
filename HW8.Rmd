@@ -89,7 +89,7 @@ summary(mod.forward)
 ```
 Describe in words what is happening at each step of the search path. 
 
-**At each step of the search path, the search path is adding one more variable to the model based on the AIC. So, first, the path calculates the AIC of each variable not included in the model and orders them in ascending order. The next step will add the lowest AIC variable to the model, and then recalculate AICs with the new model.**
+**At each step of the search path, the search path is adding one more variable to the model based on the AIC. So, first, the path calculates the AIC of each variable not included in the model and orders them in ascending order. The next step will add the lowest AIC variable to the model, and then recalculate AICs with the new model. This is done until doing nothing has the lowest AIC.**
 
 ### c. Backward
 ```{r}
@@ -97,6 +97,8 @@ mod.backward = step(mod.full, scope=mods, direction='backward')
 summary(mod.backward)
 ```
 Describe in words what is happening at each step of the search path. 
+
+**This search path is doing the opposie of the one above. It starts with the full model and at each step, the search path is removing one variable from the model based on the AIC. So, first, the path calculates the AIC of each variable included in the model and orders them in ascending order. The next step will remove the lowest AIC variable to the model, and then recalculate AICs with the new model. This is done until doing nothing has the lowest AIC.**
 
 
 ### d. Full Stepwise. 
@@ -106,6 +108,8 @@ mod.both = step(mod.1, scope=mods, direction='both')
 summary(mod.both)
 ```
 Describe in words what is happening at each step of the search path. 
+
+**This search path is a combination of the search paths from above. Starting with a model, the AIC is calculated for the variables in regards to either removal from the model for the variables in the model, or addition to the model for the variables not in the model. The variables are sorted in increasing order of their AICs so the variable with the lowest calculated AIC is either removed if it is in the model or added if it is not in the model. This is done until doing nothing has the lowest AIC.**
 
 
 
@@ -119,6 +123,8 @@ plot(summary(mod.best)$bic)
 summary(mod.best)$which[summary(mod.best)$bic == min(summary(mod.best)$bic), ]
 ```
 Describe the results. Use the documentation to help you. 
+
+**The function calculates the BIC for different combinations of subsets of the models. The first graph is showing the models and what BIC they have where the variables included in the model are shaded. The second summary is showing the optimal model based on the BIC calculations. The third graph plots the BIC calculations against the models from the subset function. Essentially, this function does the same search path method as the previous functions but uses BIC as the measurement. **
 
 
 ### f. Comparison
