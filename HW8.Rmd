@@ -81,7 +81,7 @@ mod.full = lm(mods$upper, data=College)
 
 Write out the models being fit here. 
 
-**The models being fit are with `Apps` as a response and `Private`, `Accept`, `Enroll`, `Top10perc`, `Top25perc`, `F.Undergrad`, `P.Undergrad`, `Outstate`, `Room.Board`, `Books`, `Personal`, `PhD`, `Terminal`, `S.F.Ratio`, `perc.alumni`, `Expend`, and `Grad.Rate` as the predictors. The full model includes all of these variables whereas the null model includes none of these variables.**
+**The models being fit are with `Apps` as a response and `Private`, `Accept`, `Enroll`, `Top10perc`, `Top25perc`, `F.Undergrad`, `P.Undergrad`, `Outstate`, `Room.Board`, `Books`, `Personal`, `PhD`, `Terminal`, `S.F.Ratio`, `perc.alumni`, `Expend`, and `Grad.Rate` as the predictors. The full model includes all of these variables whereas the null model includes only the predictor.**
 
 
 ### b. Forward
