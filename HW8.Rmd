@@ -124,11 +124,13 @@ summary(mod.best)$which[summary(mod.best)$bic == min(summary(mod.best)$bic), ]
 ```
 Describe the results. Use the documentation to help you. 
 
-**The function calculates the BIC for different combinations of subsets of the models. The first graph is showing the models and what BIC they have where the variables included in the model are shaded. The second summary is showing the optimal model based on the BIC calculations. The third graph plots the BIC calculations against the models from the subset function. Essentially, this function does the same search path method as the previous functions but uses BIC as the measurement. **
+**The function calculates the BIC for different combinations of subsets of the models. The first graph is showing the models and what BIC they have where the variables included in the model are shaded. The second summary is showing the optimal model based on the BIC calculations. The third graph plots the BIC calculations against the models from the subset function. Essentially, this function does the same search path method as the previous functions but uses BIC as the measurement.**
 
 
 ### f. Comparison
 Compare the results from each of the searchs. In particular, do the results match? Why or why not? Will this happen for every data set? Why or why not? What did you learn from this exercise? 
+
+**The results do not match. The calculations for the first two searches use AIC whereas the last search uses BIC. BIC penalizes model complexity more than AIC, so it would make sense that the model found in the 2e. will be less complex than the models found in b., c., and d. The models in c. and d., however, are the same. This would happen because the searches are using the same calculation (AIC) to find the optimal model, so even though they are using different methods, they should still get the same results. This may not happen for every dataset because BIC and AIC have the same calculations aside from BIC penalizing complex models more heavily. These two will only differ if AIC chooses a larger model than BIC. From this exercise, I learned that there are a few different ways to figure out how 
 
 
 ### g. `force.in`
